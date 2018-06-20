@@ -29,6 +29,68 @@
             android:textColor="@color/colorWhite"
             android:textSize="24sp" />
 
+        <!-- 顶部panel -->
+        <LinearLayout
+            android:id="@+id/ll_top_panel"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentTop="true"
+            android:background="@color/player_panel_bg"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                android:src="@drawable/titlebar_back" />
+
+            <TextView
+                android:id="@+id/tv_titleName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="2"
+                android:text="@string/title_text"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_system_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="@string/time_text"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <!-- 底部panel -->
+
+        <LinearLayout
+            android:id="@+id/ll_bottom_panel"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/player_panel_bg"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_play"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="13dp"
+                android:src="@drawable/player_play_normal" />
+
+        </LinearLayout>
+
+
     </RelativeLayout>
 
 </RelativeLayout>
