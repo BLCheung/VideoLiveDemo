@@ -54,9 +54,7 @@ public class ItemSelectorAdapter extends RecyclerView.Adapter<ItemSelectorAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String s = programNameList.get(position);
-        Log.d(TAG, "onBindViewHolder: " + s);
-        holder.tvProgramItem.setText(s);
+        holder.tvProgramItem.setText(programNameList.get(position));
     }
 
     @Override
