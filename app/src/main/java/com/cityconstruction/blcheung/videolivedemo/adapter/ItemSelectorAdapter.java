@@ -1,14 +1,16 @@
 package com.cityconstruction.blcheung.videolivedemo.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.cityconstruction.blcheung.videolivedemo.LiveActivity;
 import com.cityconstruction.blcheung.videolivedemo.R;
 
 import java.util.List;
@@ -18,11 +20,10 @@ import java.util.List;
  * Date:2018/6/20 0:07
  */
 public class ItemSelectorAdapter extends RecyclerView.Adapter<ItemSelectorAdapter.ViewHolder> {
-    private String TAG = "ItemSelectorAdapter";
     private Context context;
     private List<String> programNameList;
 
-    private String[] programUrlList = new String[]{
+    private String[] programUrlList = {
             "http://223.110.243.138/PLTV/2510088/224/3221227177/index.m3u8",
             "http://223.110.243.136/PLTV/2510088/224/3221227199/index.m3u8",
             "http://223.110.243.140/PLTV/2510088/224/3221227165/index.m3u8",
@@ -53,8 +54,17 @@ public class ItemSelectorAdapter extends RecyclerView.Adapter<ItemSelectorAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.tvProgramItem.setText(programNameList.get(position));
+        holder.llItemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, LiveActivity.class);
+                intent.putExtra(LiveActivity.EXTRA_TITLE, programNameList.get(position));
+                intent.putExtra(LiveActivity.EXTRA_URL, programUrlList[position]);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -63,10 +73,12 @@ public class ItemSelectorAdapter extends RecyclerView.Adapter<ItemSelectorAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        private LinearLayout llItemView;
         private TextView tvProgramItem;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            llItemView = (LinearLayout) itemView;
             tvProgramItem = itemView.findViewById(R.id.tv_program_item);
         }
     }

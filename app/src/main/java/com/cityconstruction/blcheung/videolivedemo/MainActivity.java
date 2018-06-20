@@ -6,6 +6,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private List<String> programNameList = new ArrayList<>();
-    private ItemSelectorAdapter adapter;
     private String[] programName = {
             "CCTV-1综合", "CCTV-2财经", "CCTV-3综艺", "CCTV-4中文国际", "CCTV-5体育", "CCTV-6电影",
             "CCTV-7军事农业", "CCTV-8电视剧", "CCTV-9纪录片", "CCTV-10科教", "CCTV-11戏曲",
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayout.VERTICAL, false));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(new ItemSelectorAdapter(this, programNameList));
+
     }
 
     private void initView() {
@@ -45,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
     private void initProgram() {
         for (int i = 0; i < programName.length; i++) {
             programNameList.add(programName[i]);
-            Log.d(TAG, "initProgram: " + i);
         }
     }
 }
