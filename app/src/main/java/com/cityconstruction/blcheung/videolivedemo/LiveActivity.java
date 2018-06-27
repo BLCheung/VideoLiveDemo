@@ -3,6 +3,8 @@ package com.cityconstruction.blcheung.videolivedemo;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,16 +26,20 @@ public class LiveActivity extends AppCompatActivity {
     public static final String EXTRA_URL = "url";
     public static final String EXTRA_TITLE = "title";
     private static final int RETRY_TIMES = 5;
+    private static final int AUTO_HIDE_TIME = 5000;
     private final String TAG = this.getClass().getSimpleName();
     private int count = 0;
     private String mUrl;
     private String mTitle;
     private VideoView mVideoView;
+    /**
+     * 顶部底部panel
+     */
     private LinearLayout llTopPanel, llBottomPanel;
-    private RelativeLayout rlLoadingLayout;
-    private ProgressBar pbLoading;
+    private RelativeLayout rlLoadingLayout, rlRootView;
     private ImageView ivBack, ivPlay;
-    private TextView tvTitleName, tvSystemTime, tvLoading;
+    private TextView tvTitleName, tvSystemTime;
+    private Handler mHandler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,16 +50,38 @@ public class LiveActivity extends AppCompatActivity {
         mTitle = getIntent().getStringExtra(EXTRA_TITLE);
         Log.d(TAG, "onCreate: " + mTitle + ": " + mUrl);
         initView();
-        initVedioView();
+        initVideoView();
+
+        rlRootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (llTopPanel.getVisibility() == View.VISIBLE
+                        || llBottomPanel.getVisibility() == View.VISIBLE) {
+                    llTopPanel.setVisibility(View.GONE);
+                    llBottomPanel.setVisibility(View.GONE);
+                    return;
+                }
+                llTopPanel.setVisibility(View.VISIBLE);
+                llBottomPanel.setVisibility(View.VISIBLE);
+                // 5秒后无操作就GONE掉
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        llTopPanel.setVisibility(View.GONE);
+                        llBottomPanel.setVisibility(View.GONE);
+                    }
+                }, AUTO_HIDE_TIME);
+            }
+        });
     }
 
 
     private void initView() {
+        mVideoView = findViewById(R.id.io_surface_view);
         tvTitleName = findViewById(R.id.tv_titleName);
         tvTitleName.setText(mTitle);
         tvSystemTime = findViewById(R.id.tv_system_time);
         tvSystemTime.setText(getCurrentTime());
-        tvLoading = findViewById(R.id.tv_loading);
         ivBack = findViewById(R.id.iv_back);
         // 返回
         ivBack.setOnClickListener(new View.OnClickListener() {
@@ -63,15 +91,14 @@ public class LiveActivity extends AppCompatActivity {
             }
         });
         ivPlay = findViewById(R.id.iv_play);
-        pbLoading = findViewById(R.id.pb_loading);
         rlLoadingLayout = findViewById(R.id.rl_loading_layout);
+        rlRootView = findViewById(R.id.rl_rootView);
         llTopPanel = findViewById(R.id.ll_top_panel);
         llBottomPanel = findViewById(R.id.ll_bottom_panel);
     }
 
-    private void initVedioView() {
+    private void initVideoView() {
         Vitamio.isInitialized(getApplicationContext());
-        mVideoView = findViewById(R.id.io_surface_view);
         mVideoView.setVideoURI(Uri.parse(mUrl));
         mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
@@ -116,6 +143,8 @@ public class LiveActivity extends AppCompatActivity {
                         // 解码时音频先出来,视频后出来
                     case MediaPlayer.MEDIA_INFO_VIDEO_TRACK_LAGGING:
                         rlLoadingLayout.setVisibility(View.GONE);
+                        break;
+                    default:
                         break;
                 }
                 return false;
